@@ -1,4 +1,5 @@
 import 'package:chat_app_demo3/main.dart';
+import 'package:chat_app_demo3/states/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,8 +9,20 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class Chats extends StatelessWidget {
+class Chats extends StatefulWidget {
   const Chats({Key? key}) : super(key: key);
+
+  @override
+  State<Chats> createState() => _ChatsState();
+}
+
+class _ChatsState extends State<Chats> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    chatState.refreshChatsForCurrentUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,24 +61,25 @@ class Chats extends StatelessWidget {
           return Container();
         });
   }
-//     CustomScrollView(
+}
+//     return CustomScrollView(
 //       slivers: [
 //         CupertinoSliverNavigationBar(
 //           largeTitle: Text("Chats"),
 //         ),
 //         SliverList(
-//             delegate: SliverChildListDelegate([
-//           CupertinoListTile(
-//             title: Text("Chat1"),
-//           ),
-//           CupertinoListTile(
-//             title: Text("Chat2"),
-//           ),
-//           CupertinoListTile(
-//             title: Text("Chat3"),
-//           ),
-//         ]))
+//           delegate: SliverChildListDelegate(
+//               chatState.messages.values.toList().map((data) {
+//             return CupertinoListTile(
+//               title: Text(data['friendName']),
+//               subtitle: Text(data['msg']),
+//               onTap: () => callChatDetailScreen(
+//                 context, data['']
+//               ),
+//             );
+//           }).toList()),
+//         )
 //       ],
 //     );
 //   }
-}
+// }

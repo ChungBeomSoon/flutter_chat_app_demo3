@@ -31,16 +31,26 @@ class _ChatDetailState extends State<ChatDetail> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    checkUser();
+  }
+
+  void checkUser() async {
     chats
         .where('users', isEqualTo: {friendUid: null, currentUserId: null})
         .limit(1)
         .get()
-        .then((QuerySnapshot querySnapshot) {
+        .then((QuerySnapshot querySnapshot) async {
           if (querySnapshot.docs.isNotEmpty) {
-            chatDocId = querySnapshot.docs.single.id;
+            setState(() {
+              chatDocId = querySnapshot.docs.single.id;
+            });
           } else {
-            chats.add({
-              'users': {currentUserId: null, friendUid: null}
+            await chats.add({
+              'users': {currentUserId: null, friendUid: null},
+              'names': {
+                currentUserId: FirebaseAuth.instance.currentUser?.displayName,
+                friendUid: friendName
+              }
             }).then((value) => {chatDocId = value});
           }
         })
@@ -54,6 +64,7 @@ class _ChatDetailState extends State<ChatDetail> {
     chats.doc(chatDocId).collection('messages').add({
       'createOn': FieldValue.serverTimestamp(),
       'uid': currentUserId,
+      'friendName': friendName,
       'msg': msg
     }).then((value) {
       _textController.text = '';

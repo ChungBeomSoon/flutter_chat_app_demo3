@@ -48,8 +48,8 @@ class UserName extends StatelessWidget {
           CupertinoButton.filled(
               child: Text("Continue"),
               onPressed: () {
-                FirebaseAuth.instance.currentUser!
-                    .updateDisplayName(_text.text);
+                FirebaseAuth.instance.currentUser
+                    ?.updateDisplayName(_text.text);
 
                 createUserInFirestore();
 
